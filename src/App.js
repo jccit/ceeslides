@@ -1,4 +1,11 @@
 import React from 'react';
 import { render } from 'react-dom';
+import SlideFrame from './components/SlideFrame';
+import GlobalStyles from './styles';
 
-render(<p>Hello world</p>, document.querySelector('#app'));
+render(
+    <main>
+        <GlobalStyles />
+        <SlideFrame />
+    </main>
+, document.querySelector('#app'));
