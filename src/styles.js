@@ -7,11 +7,11 @@ export default () => {
             styles={css`
                 * {
                     box-sizing: border-box;
+                    margin: 0;
+                    padding: 0;
                 }
 
                 html, body {
-                    margin: 0;
-                    padding: 0;
                     width: 100vw;
                     height: 100vh;
                     background: #000;

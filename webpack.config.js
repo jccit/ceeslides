@@ -20,11 +20,11 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            template: 'src/html/index.html'
+            template: 'static/index.html'
         })
     ],
     devServer: {
-        contentBase: path.resolve(__dirname, 'src', 'html'),
+        contentBase: path.resolve(__dirname, 'static'),
         compress: true,
         inline: true,
         hot: true,
