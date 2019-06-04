@@ -10,27 +10,54 @@ class SlideFrame extends Component {
         super();
 
         this.state = {
-            width: '100vw'
+            aspect: 1
         };
     }
 
     render() {
+        const containerCSS = css`
+            background-color: #fff;
+            margin: 0 auto;
+            position: relative;
+        `;
+
+        const fixedAspectCSS = css`
+            width: ${1 / this.state.aspect * 100}vh;
+
+            &::before {
+                content: '';
+                position: relative;
+                display: block;
+                top: 0;
+                left: 0;
+                width: 100%;
+                padding-bottom: ${this.state.aspect * 100}%;
+            }
+        `;
+
+        const fillCSS = css`
+            width: 100vw;
+            height: 100vh;
+        `;
+
+        let styles = [containerCSS];
+
+        if (this.state.aspect === 1) {
+            styles.push(fillCSS);
+        } else {
+            styles.push(fixedAspectCSS);
+        }
+
         return (
-            <div css={css`
-                background-color: #fff;
-                margin: 0 auto;
-                height: 100vh;
-                width: ${this.state.width};
-                transition: width 0.5s ${easing};
-            `}>
+            <div css={styles}>
                 <Slide />
-                <FrameControls setWidth={this.setFrameWidth.bind(this)} />
+                <FrameControls setAspect={this.setFrameAspect.bind(this)} />
             </div>
         );
     }
 
-    setFrameWidth(width) {
-        this.setState({ width });
+    setFrameAspect(aspect) {
+        this.setState({ aspect });
     }
 }
 
