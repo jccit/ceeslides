@@ -3,15 +3,60 @@ import { css, jsx } from '@emotion/core';
 import { Component } from 'react';
 import Slide from './Slide';
 import FrameControls from './FrameControls';
-import { easing } from '../styles';
+import InputManager from '../input/InputManager';
 
 class SlideFrame extends Component {
     constructor() {
         super();
 
+        this.inputManager = new InputManager(this.changeSlide.bind(this));
+
         this.state = {
-            aspect: 1
+            aspect: 1,
+            slideDeck: 'test-deck',
+            manifestLoaded: false,
+            manifest: {},
+            currentSlide: 0
         };
+    }
+
+    componentDidMount() {
+        this.loadSlides();
+    }
+
+    async loadSlides() {
+        const manifestRequest = await fetch(`/slides/${this.state.slideDeck}/manifest.json`);
+        const manifest = await manifestRequest.json();
+
+        this.setState({
+            manifest,
+            manifestLoaded: true
+        });
+    }
+
+    changeSlide(offset) {
+        if (this.state.currentSlide + offset < this.state.manifest.slides.length &&
+            this.state.currentSlide + offset >= 0) {
+            this.setState({
+                currentSlide: this.state.currentSlide + offset
+            });
+        }
+    }
+
+    renderSlides() {
+        if (this.state.manifestLoaded) {
+            const slideEls = [];
+
+            for (let i = 0; i < this.state.manifest.slides.length; i++) {
+                const slide = this.state.manifest.slides[i];
+                const show = i == this.state.currentSlide;
+                slideEls.push(<Slide slide={`/slides/${this.state.slideDeck}/slides/${slide}.md`} show={show} key={i} />);
+            }
+
+            return slideEls;
+        }
+
+        return null;
     }
 
     render() {
@@ -50,7 +95,7 @@ class SlideFrame extends Component {
 
         return (
             <div css={styles}>
-                <Slide />
+                { this.renderSlides() }
                 <FrameControls setAspect={this.setFrameAspect.bind(this)} />
             </div>
         );

@@ -13,22 +13,25 @@ class Slide extends Component {
     }
 
     componentDidMount() {
-        console.log(markdown);
-        markdown('/test.md').then(content => {
+        markdown(this.props.slide).then(content => {
             this.setState({ content });
         })
     }
 
     render() {
-        return (
-            <div dangerouslySetInnerHTML={{ __html: this.state.content }} css={css`
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-            `}></div>
-        );
+        if (this.props.show) {
+            return (
+                <div dangerouslySetInnerHTML={{ __html: this.state.content }} css={css`
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                `}></div>
+            );
+        }
+
+        return null;
     }
 }
 
